@@ -10,7 +10,7 @@
 // @icon        https://raw.githubusercontent.com/Richard2091/Miscellaneous/main/Rick.jpg
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js 
 // @require     https://cdn.jsdelivr.net/npm/vue
-// @updateURL   
+// @updateURL   https://raw.githubusercontent.com/Richard2091/Miscellaneous/main/AutoReserveSeat.js
 // ==/UserScript==
 (function() {
     'use strict';
