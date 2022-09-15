@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     0.4
+// @version     0.5
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -23,9 +23,9 @@
     //座位号(输入完整编号,前面如果有0就要带0)
     var seatNum = '001';
     //开始运行时间(默认21:30 注意前面不要带0, 如01, 直接写1即可)
-    var startHour=21, startMinute=30;
-    //运行时长(超过此时间后,若预约失败,不再重试)
-    var runningTime = 1;
+    var startHour = 21, startMinute = 30;
+    //运行时长(超过此时间后停止运行, 单位:分钟)
+    var runMinute = 1;
     //预约时间(每行代表一次预约,一行内前者表示开始时间,后者表示结束时间)
     var timeList = [["08:30","12:30"],
                     ["12:30","14:00"],
@@ -46,6 +46,9 @@
     //当前时间
     var timeNow = new Date();
     var hour, minute, second;
+    
+    //预约是否全部成功
+    var allSuccess = true;
   
     //预约座位
     function reserveSeat(){
@@ -80,12 +83,10 @@
         });
         //输出返回值
         console.log(timeList[i][0]+"-"+timeList[i][1]+" 预约结果:"+reserveResult);
-        //如果没有超时,则判断是否需要重试
-        if(minute-startMinute <= runningTime){
-          //如果失败则刷新页面重试
-          if(reserveResult == "预约失败，请退出后重试！"){
-            window.location.reload();
-          }
+        //判断预约结果
+        if(reserveResult != "该时间段您已有预约！"){
+          //预约失败
+          allSuccess = false;
         }
       }
     }
@@ -104,13 +105,17 @@
         hour = timeNow.getHours(), minute = timeNow.getMinutes(), second = timeNow.getSeconds();
         //抢座前5秒输出倒计时
         if(hour==startHour && minute==startMinute-1 && second>=55){
-          console.log("正在倒计时,现在是 "+hour+":"+minute+":"+second);
+          console.log("时间数据已更新,现在是 "+hour+":"+minute+":"+second);
         }
-        //到点开始运行
-        if(hour==startHour && minute>=startMinute && minute-startMinute<runningTime){
-          console.log("现在时间:"+hour+":"+minute+":"+second+". 到点了,开冲!");
-          //开始预约
-          reserveSeat();
+        //到点开始运行, 超时停止预约
+        if(hour==startHour && minute>=startMinute && minute<runMinute+startMinute){
+          //如果还未成功,则继续预约
+          if(!allSuccess){
+            //将预约结果重置
+            allSuccess = true;
+            //开始预约
+            reserveSeat();
+          }
         }
       }, 1000);
     }
@@ -119,4 +124,10 @@
     timeUpdater();
   
 })();
+
+
+/*TODO
+    成功后刷新页面
+    每到零点刷新日期(每秒更新也行?)
+*/
 
