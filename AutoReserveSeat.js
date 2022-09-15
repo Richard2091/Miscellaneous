@@ -112,7 +112,7 @@
           console.log("正在倒计时,现在是 "+hour+":"+minute+":"+second);
         }
         //到点开始运行
-        if(hour>=startHour && minute>=startMinute && second>=startSecond){
+        if(hour>=startHour && minute>=startMinute && second>=startSecond && minute-startMinute<runningTime){
           console.log("现在时间:"+hour+":"+minute+":"+second+". 到点了,开冲!");
           //开始预约
           reserveSeat();
