@@ -22,8 +22,8 @@
     var roomId = '905';
     //座位号(输入完整编号,前面如果有0就要带0)
     var seatNum = '001';
-    //开始运行时间(默认21:30:00 注意不要写00,直接写0即可, 01同理写1)
-    var startHour=21, startMinute=30, startSecond=0;
+    //开始运行时间(默认21:30 注意前面不要带0, 如01, 直接写1即可)
+    var startHour=21, startMinute=30;
     //运行时长(超过此时间后,若预约失败,不再重试)
     var runningTime = 1;
     //预约时间(每行代表一次预约,一行内前者表示开始时间,后者表示结束时间)
@@ -103,16 +103,11 @@
         timeNow = new Date();
         hour = timeNow.getHours(), minute = timeNow.getMinutes(), second = timeNow.getSeconds();
         //抢座前5秒输出倒计时
-        //不跨0秒
-        if(hour==startHour && minute==startMinute && startSecond-second<=5 && startSecond>second){
-          console.log("正在倒计时,现在是 "+hour+":"+minute+":"+second);
-        }
-        //跨0秒
-        if(hour==startHour && minute==startMinute-1 && startSecond<=5 && (second>=55 || second<=startSecond)){
+        if(hour==startHour && minute==startMinute-1 && second>=55){
           console.log("正在倒计时,现在是 "+hour+":"+minute+":"+second);
         }
         //到点开始运行
-        if(hour>=startHour && minute>=startMinute && second>=startSecond && minute-startMinute<runningTime){
+        if(hour==startHour && minute>=startMinute && minute-startMinute<runningTime){
           console.log("现在时间:"+hour+":"+minute+":"+second+". 到点了,开冲!");
           //开始预约
           reserveSeat();
