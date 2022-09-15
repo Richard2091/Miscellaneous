@@ -21,7 +21,7 @@
     //自习室(电子借阅室905,自习一室906,自习四室907)
     var roomId = '905';
     //座位号(输入完整编号,前面如果有0就要带0)
-    var seatNum = '057';
+    var seatNum = '001';
     //开始运行时间(默认21:30:00 注意不要写00,直接写0即可, 01同理写1)
     var startHour=21, startMinute=30, startSecond=0;
     //运行时长(超过此时间后,若预约失败,不再重试)
@@ -65,7 +65,7 @@
       //模拟多次请求
       for(var i=0; i<timeList.length; i++){
         //合成链接
-        var reserveURL = "http://office.chaoxing.com/data/apps/seatengine/submit?roomId="+roomId+"&startTime="+timeList[i][0]+"&endTime="+timeList[i][1]+"&day="+tomorrow+"&captcha=&seatNum=004&token="+token;
+        var reserveURL = "http://office.chaoxing.com/data/apps/seatengine/submit?roomId="+roomId+"&startTime="+timeList[i][0]+"&endTime="+timeList[i][1]+"&day="+tomorrow+"&captcha=&seatNum="+seatNum+"&token="+token;
         //接收预约结果
         var reserveResult = null;
         //发送请求
