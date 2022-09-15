@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     0.6
+// @version     0.7
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -31,6 +31,8 @@
                     ["12:30","14:00"],
                     ["14:00","18:00"],
                     ["18:00","21:30"]];
+    //推送服务密钥(访问此页面获取密钥https://sct.ftqq.com/sendkey)
+    var sendKey = "";
   
   
   
@@ -82,7 +84,7 @@
           }
         });
         //输出返回值
-        console.log(timeList[i][0]+"-"+timeList[i][1]+" 预约结果:"+reserveResult);
+        console.log(seatNum+" "+timeList[i][0]+"-"+timeList[i][1]+" 预约结果: "+reserveResult);
         //判断预约结果
         if(reserveResult != "该时间段您已有预约！"){
           //预约失败
@@ -95,9 +97,9 @@
     function timeUpdater(){
       //初始化日期数据
       year = today.getFullYear(), month = today.getMonth()+1, date = today.getDate();
-      console.log("日期数据已获取,现在是"+year+"年"+month+"月"+date+"日");
+      console.log("日期数据已获取, 现在是"+year+"年"+month+"月"+date+"日");
       tomorrow = year+'-'+month+'-'+(date+1);
-      console.log("预约 "+tomorrow+" 的 "+ seatNum +" 号座位");
+      console.log("将在 "+startHour+":"+startMinute+" 自动预约 "+ seatNum +" 号座位");
 
       //每秒更新时间数据
       let updateTime = setInterval(() => {
@@ -105,7 +107,7 @@
         hour = timeNow.getHours(), minute = timeNow.getMinutes(), second = timeNow.getSeconds();
         //抢座前5秒输出倒计时
         if(hour==startHour && minute==startMinute-1 && second>=55){
-          console.log("正在倒计时,现在是 "+hour+":"+minute+":"+second);
+          console.log("正在倒计时, 现在是 "+hour+":"+minute+":"+second);
         }
         //到点开始运行, 超时停止预约
         if(hour==startHour && minute>=startMinute && minute<runMinute+startMinute){
@@ -113,9 +115,31 @@
           if(!allSuccess){
             //将预约结果重置
             allSuccess = true;
-            //开始预约
+            //提示开始预约
             console.log("现在是 "+hour+":"+minute+":"+second+" 开始预约");
+            //保存过程信息
+            var information = hour+":"+minute+":"+second+" 发起预约。\n";
+            //开始预约
             reserveSeat();
+            //处理预约结果
+            if(allSuccess){
+              //输出成功提示
+              console.log(tomorrow+" "+seatNum+" 所有时间段预约成功");
+              //保存结果信息
+              information += tomorrow+" "+seatNum+" 所有时间段预约成功";
+              //判断是否推送
+              if(sendKey != ""){
+                //发起推送
+                $.ajax({
+                  type: "GET",
+                  url: "https://sctapi.ftqq.com/"+sendKey+".send?title=座位自动预约成功&desp="+information,
+                  async: false,
+                  success: function(data) {
+                    console.log(data);
+                  }
+                });
+              }
+            }
           }
         }
       }, 1000);
