@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     0.3
+// @version     0.4
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       unsafeWindow
@@ -25,7 +25,7 @@
     //开始运行时间(默认21:30:00 注意不要写00,直接写0即可, 01同理写1)
     var startHour=21, startMinute=30, startSecond=0;
     //运行时长(超过此时间后,若预约失败,不再重试)
-    var runningTime = 5;
+    var runningTime = 1;
     //预约时间(每行代表一次预约,一行内前者表示开始时间,后者表示结束时间)
     var timeList = [["08:30","12:30"],
                     ["12:30","14:00"],
