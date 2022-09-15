@@ -3,7 +3,7 @@
 // @version     0.4
 // @author      Richard
 // @description 定时自动模拟请求预约座位
-// @grant       unsafeWindow
+// @grant       none
 // @icon        https://raw.githubusercontent.com/Richard2091/Miscellaneous/main/Rick.jpg
 // @namespace   hnit_chaoxing_library_seatSystem
 // @match       *://office.chaoxing.com/*
