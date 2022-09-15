@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     0.5
+// @version     0.6
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -24,7 +24,7 @@
     var seatNum = '001';
     //开始运行时间(默认21:30 注意前面不要带0, 如01, 直接写1即可)
     var startHour = 21, startMinute = 30;
-    //运行时长(超过此时间后停止运行, 单位:分钟)
+    //运行时长(超过此时间后停止运行, 不能为0和小数, 预约成功会提前停止, 单位:分钟)
     var runMinute = 1;
     //预约时间(每行代表一次预约,一行内前者表示开始时间,后者表示结束时间)
     var timeList = [["08:30","12:30"],
@@ -48,7 +48,7 @@
     var hour, minute, second;
     
     //预约是否全部成功
-    var allSuccess = true;
+    var allSuccess = false;
   
     //预约座位
     function reserveSeat(){
@@ -105,7 +105,7 @@
         hour = timeNow.getHours(), minute = timeNow.getMinutes(), second = timeNow.getSeconds();
         //抢座前5秒输出倒计时
         if(hour==startHour && minute==startMinute-1 && second>=55){
-          console.log("时间数据已更新,现在是 "+hour+":"+minute+":"+second);
+          console.log("正在倒计时,现在是 "+hour+":"+minute+":"+second);
         }
         //到点开始运行, 超时停止预约
         if(hour==startHour && minute>=startMinute && minute<runMinute+startMinute){
@@ -114,6 +114,7 @@
             //将预约结果重置
             allSuccess = true;
             //开始预约
+            console.log("现在是 "+hour+":"+minute+":"+second+" 开始预约");
             reserveSeat();
           }
         }
