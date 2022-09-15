@@ -16,7 +16,7 @@
 - 以**模拟请求**的方式预约座位, 比一步步**点击操作**预约更快
 - 可自行设置`自习室` `座位` `预约时间段` `提交预约时间` `停止提交时间`
 ### 使用方法
-1. 复制 [ReserveSeat.js](https://github.com/Richard2091/Miscellaneous/blob/main/AutoReserveSeat.js) 的全部代码
+1. 复制 [ReserveSeat.js](https://github.com/Richard2091/Miscellaneous/blob/main/ReserveSeat.js) 的全部代码
 2. 打开浏览器的`开发者工具`
 3. 切换到`console`控制台功能
 4. 将复制好的代码粘贴
