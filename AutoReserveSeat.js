@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     0.9
+// @version     1.0
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -21,16 +21,16 @@
     //自习室(电子借阅室905,自习一室906,自习四室907)
     var roomId = '905';
     //座位号(输入完整编号,前面如果有0就要带0)
-    var seatNum = '001';
+    var seatList = ["001","099","150"];
     //预约时间(每行代表一次预约,一行内前者表示开始时间,后者表示结束时间)
-    var timeList = [["08:30","12:30"],
-                    ["12:30","14:00"],
+    var timeList = [["18:00","21:30"],
+                    ["08:30","12:30"],
                     ["14:00","18:00"],
-                    ["18:00","21:30"]];
+                    ["12:30","14:00"]];
     //开始运行时间(默认21:30:00 注意前面不要带0, 如01, 直接写1即可)
     var startHour = 21, startMinute = 30;
-    //最大尝试次数(如果预约不成功且预约次数低于此值时会自动重新预约, 预约所有时间段算一次)
-    var maxTryNum = 10;
+    //尝试预约次数(避免预约失败, 自动重复预约, 预约所有时间段算一次)
+    var tryReserveNum = 3;
     //推送服务密钥(访问此页面获取密钥https://sct.ftqq.com/sendkey 留空则不推送)
     var sendKey = "";
   
@@ -51,6 +51,8 @@
     
     //预约成功次数
     var successNum = 0;
+    //换座位
+    var seatNum = 0;
   
     //发起单次预约
     function reserveSeat(startTime, endTime){
@@ -69,7 +71,7 @@
       var token = htmlData.split("token: '")[1].split("'")[0];
       //定义链接
       var reserveURL = "http://office.chaoxing.com/data/apps/seatengine/submit?";
-      var reserveParameter = "roomId="+roomId+"&startTime="+startTime+"&endTime="+endTime+"&day="+tomorrow+"&captcha=&seatNum="+seatNum+"&token="+token;
+      var reserveParameter = "roomId="+roomId+"&startTime="+startTime+"&endTime="+endTime+"&day="+tomorrow+"&captcha=&seatNum="+(seatList[seatNum])+"&token="+token;
       //接收预约结果
       var reserveResult = null;
       //发送请求
@@ -79,7 +81,7 @@
         async: false,
         dataType:'json',
         success: function(json) {
-          if(json.success || json.msg=="该时间段您已有预约！"){
+          if(json.success){
             reserveResult = "预约成功";
           }else{
             reserveResult = json.msg;
@@ -87,7 +89,7 @@
         }
       });
       //输出返回值
-      var information = "座位 "+seatNum+" 时间段"+startTime+"-"+endTime+" "+reserveResult;
+      var information = "座位 "+seatList[seatNum]+" 时间段"+startTime+"-"+endTime+" "+reserveResult;
       console.log(information);
       //处理结果
       if(reserveResult == "预约成功"){
@@ -105,6 +107,11 @@
         //记录成功次数
         successNum++;
       }
+      //如果被占用
+      if(reserveResult == "该时间段已被占用！"){
+        //换座位
+        seatNum++;
+      }
     }
     
     //时间函数
@@ -113,7 +120,7 @@
       year = today.getFullYear(), month = today.getMonth()+1, date = today.getDate();
       console.log("日期数据已获取, 现在是"+year+"年"+month+"月"+date+"日");
       tomorrow = year+'-'+month+'-'+(date+1);
-      console.log("将在 "+startHour+":"+startMinute+" 自动预约 "+ seatNum +" 号座位");
+      console.log("将在 "+startHour+":"+startMinute+" 自动预约 "+ seatList[seatNum] +" 号座位");
 
       //每秒更新时间数据
       let updateTime = setInterval(() => {
@@ -146,8 +153,8 @@
             //提示当前次数
             console.log("发起第 "+(reserveNum+1)+"次预约");
             //遍历时间表
-            for(var j=0; j<timeList.length; j++){
-              reserveSeat(timeList[j][0], timeList[j][1]);
+            while(successNum < timeList.length){
+              reserveSeat(timeList[successNum][0], timeList[successNum][1]);
             }  
           }
         }
