@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     1.0
+// @version     1.1
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
