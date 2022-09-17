@@ -54,6 +54,17 @@
     //换座位
     var seatNum = 0;
   
+    function pushInformation(title){
+      $.ajax({
+        type: "GET",
+        url: "https://sctapi.ftqq.com/"+sendKey+".send?title="+title,
+        async: true,
+        success: function(data) {
+          //console.log(data);
+        }
+      });
+    }
+  
     //发起单次预约
     function reserveSeat(startTime, endTime){
       //用于接收页面返回值
@@ -95,22 +106,26 @@
       if(reserveResult == "预约成功"){
         //如果填了sendKey则发起推送
         if(sendKey!=""){
-          $.ajax({
-            type: "GET",
-            url: "https://sctapi.ftqq.com/"+sendKey+".send?title="+information,
-            async: true,
-            success: function(data) {
-              console.log(data);
-            }
-          });
+          pushInformation(information);
         }
         //记录成功次数
         successNum++;
+        //如果全部成功
+        if(successNum == timeList.length){
+          pushInformation("所有时间段预约成功");
+        }
       }
       //如果被占用
       if(reserveResult == "该时间段已被占用！"){
-        //换座位
-        seatNum++;
+        //如果还有备选座位
+        if(seatNum < seatList.length){
+          //换座位
+          seatNum++;
+        }
+        //否则推送通知预约未全部完成
+        else{
+          pushInformation("未能预约所有时间段");
+        }
       }
     }
     
