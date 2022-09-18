@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     1.2
+// @version     1.3
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -160,7 +160,7 @@
         //到点开始运行
         if(hour==startHour && minute==startMinute && second==0){
           //反复发起预约
-          for(var reserveNum=0; reserveNum<maxTryNum; reserveNum++){
+          for(var reserveNum=0; reserveNum<tryReserveNum; reserveNum++){
             //全部成功则中止
             if(successNum == timeList.length){
               break;
