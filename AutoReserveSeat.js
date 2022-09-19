@@ -51,7 +51,7 @@
     
     //预约成功次数
     var successNum = 0;
-    //换座位
+    //选用的座位
     var seatNum = 0;
   
     function pushInformation(title){
@@ -110,10 +110,6 @@
         }
         //记录成功次数
         successNum++;
-        //如果全部成功
-        if(successNum == timeList.length){
-          pushInformation("所有时间段预约成功");
-        }
       }
       //如果被占用
       if(reserveResult == "该时间段已被占用！"){
@@ -122,10 +118,7 @@
           //换座位
           seatNum++;
         }
-        //否则推送通知预约未全部完成
-        else{
-          pushInformation("未能预约所有时间段");
-        }
+        //未能全部完成
       }
     }
     
