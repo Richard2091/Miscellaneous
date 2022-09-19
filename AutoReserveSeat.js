@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     1.3
+// @version     1.4
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -100,7 +100,9 @@
         }
       });
       //输出返回值
-      var information = "座位 "+seatList[seatNum]+" 时间段"+startTime+"-"+endTime+" "+reserveResult;
+      timeNow = new Date();
+      hour = timeNow.getHours(), minute = timeNow.getMinutes(), second = timeNow.getSeconds();
+      var information = hour+":"+minute+":"+second+" 座位"+seatList[seatNum]+" 时间段"+startTime+"-"+endTime+" "+reserveResult;
       console.log(information);
       //处理结果
       if(reserveResult == "预约成功"){
