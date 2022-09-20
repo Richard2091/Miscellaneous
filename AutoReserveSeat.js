@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     1.4
+// @version     1.7
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -138,11 +138,14 @@
         timeNow = new Date();
         hour = timeNow.getHours(), minute = timeNow.getMinutes(), second = timeNow.getSeconds();
         
-        //每小时检测日期数据
+        //每小时更新日期数据
         if(!minute && !second){
+          var oldDay = date();
+          //更新日期数据
+          today = new Date();
+          year = today.getFullYear(), month = today.getMonth()+1, date = today.getDate();
           //数据发生变化则更新并输出提示
-          if(today.getDate() != date){
-            year = today.getFullYear(), month = today.getMonth()+1, date = today.getDate();
+          if(oldDay != date){
             console.log("日期数据已更新, 现在是"+year+"年"+month+"月"+date+"日");
           }
         }
