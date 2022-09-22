@@ -6,7 +6,7 @@
 // @grant       GM_notification
 // @connect     office.chaoxing.com
 // @connect     www.pushplus.plus
-// @version     1.3
+// @version     1.2
 // @author      Richard
 // @description 每10分钟检查签到, 并设置定时器, 到点自动签到/签退
 // @icon        https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/calendar-check.svg
@@ -108,7 +108,7 @@
                     }
                     //还未签到
                     if(startTime > nowTime && !waitSign){
-                        console.log("已获取 "+seatNum+" 的签到时间, 等待中");
+                        console.log("当前预约:"+seatNum+" 已获取签到时间, 等待中");
                         //等待签到
                         waitSign = true;
                         //开启签到定时器
@@ -117,7 +117,7 @@
 
                     //还未签退
                     if(endTime > nowTime && !waitSignback){
-                        console.log("已获取 "+seatNum+" 的签退时间, 等待中");
+                        console.log("当前预约:"+seatNum+" 已获取签退时间, 等待中");
                         //等待签退
                         waitSignback = true;
                         //开启签退定时器
