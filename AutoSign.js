@@ -6,7 +6,7 @@
 // @grant       GM_notification
 // @connect     office.chaoxing.com
 // @connect     www.pushplus.plus
-// @version     1.1
+// @version     1.2
 // @author      Richard
 // @description 每10分钟检查签到, 并设置定时器, 到点自动签到/签退
 // @icon        https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/calendar-check.svg
@@ -16,14 +16,44 @@
 (function(){
     'use strict';
 
-    //签到提前时间()
+    ////////////  用户配置  ////////////
+
+    //签到提前时间 (例如预约的8:30, 此处填18, 将会在8:12签到)
     let advanceTime = 18;
+    //推送服务 (访问此页面获取 https://www.pushplus.plus/push1.html 留空则不推送)
+    let token = "111100862b9b4c74ac9418407221cc8c";
+
+    ////////////  功能模块  ////////////
 
     //当前等待签到的预约id
     let reserveId = "";
     //是否已在等待签到
     let waitSign = false;
     let waitSignback = false;
+
+    //本地+推送 通知服务
+    function information(seatNum, type, result, msg){
+        //弹出通知
+        GM_notification({
+            image: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/circle-check.svg",
+            title: "座位 "+seatNum+" "+type+result,
+            text: dayjs().format("MM/DD HH:MM:ss")
+        });
+        //如果填了token则推送
+        if(token != ""){
+            let title = "座位 "+seatNum+" "+type+result;
+            let content = msg;
+            //pushplus推送
+            $.ajax({
+                type: "GET",
+                url: "http://www.pushplus.plus/send?token="+token+"&title="+title+"&content="+content+"&template=html",
+                async: true,
+                success: function(data) {
+                    // console.log(data);
+                }
+            });
+        }
+    }
 
     //签到、签退
     function sign(seatNum, URL, type, waitTime){
@@ -36,12 +66,11 @@
                     let result = JSON.parse(response.responseText)
                     //操作成功
                     if(result.success){
-                        //弹出通知
-                        GM_notification({
-                            image: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/circle-check.svg",
-                            title: "座位 "+seatNum+" "+type+"成功",
-                            text: dayjs().format("MM/DD HH:MM:ss")
-                        });
+                        information(seatNum, type, "成功", "");
+                    }
+                    //操作失败
+                    else{
+                        information(seatNum, type, "失败", result.msg);
                     }
                 }
             });
