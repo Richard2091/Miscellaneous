@@ -21,7 +21,7 @@
     //签到提前时间 (例如预约的8:30, 此处填18, 将会在8:12签到)
     let advanceTime = 18;
     //推送服务 (访问此页面获取 https://www.pushplus.plus/push1.html 留空则不推送)
-    let token = "111100862b9b4c74ac9418407221cc8c";
+    let token = "";
 
     ////////////  功能模块  ////////////
 
