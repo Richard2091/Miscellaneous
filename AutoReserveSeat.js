@@ -15,8 +15,6 @@
 (function() {
 	'use strict';
 
-
-
 	//////////////////////  用户配置  //////////////////////
 
 	//自习室(电子借阅室905,自习一室906,自习四室907)
@@ -24,7 +22,7 @@
 	//座位号(输入完整编号,前面如果有0就要带0)
 	var seatList = ["001", "050", "099", "188"];
 	//预约时间(每行代表一次预约,一行内前者表示开始时间,后者表示结束时间)
-	var timeList = [["18:00", "21:30"], ["14:00", "18:00"], ["12:30", "14:00"], ["08:30", "12:30"]];
+	var timeList = [["18:00", "22:00"], ["14:00", "18:00"], ["12:30", "14:00"], ["08:30", "12:30"]];
 	//开始运行时间(默认21:30:00:000 注意前面不要带0, 如01, 直接写1即可)
 	var startHour = 21;
 	var startMinute = 30;
@@ -37,12 +35,11 @@
     //推送服务② (访问此页面获取 https://www.pushplus.plus/push1.html 留空则不推送)
     let token = "";
 
-
-
 	//////////////////////  功能模块  //////////////////////
 
     //是否在等待预约
     let isWaiting;
+
 	//设置预约时间
 	var reserveTime;
 
@@ -87,8 +84,8 @@
             //失败次数
             let failNum = 0;
 
-            //遍历时间表
-            while(timeIndex < timeList.length) {
+            //检查所有时间和座位
+            while(timeIndex<timeList.length && seatIndex<seatList.length) {
                 //用于接收页面返回值
                 var htmlData = null;
                 //选座页面链接
@@ -115,7 +112,6 @@
                 var reserveParameter = "roomId="+roomId+"&startTime="+timeList[timeIndex][0]+"&endTime="+timeList[timeIndex][1]+"&day="+tomorrow+"&seatNum="+(seatList[seatIndex])+"&token=" + token;
                 //发起预约请求的时间
                 let requestReserveTime = dayjs().format("HH:MM:ss:SSS");
-                
                 //发起预约
                 $.ajax({
                     type: "GET",
@@ -135,6 +131,7 @@
 
                         //预约成功
                         if(reserveResult.success){
+                            reserveResult.msg = "预约成功";
                             //预约下一个时间段
                             timeIndex++;
                             //判断是否推送
@@ -149,18 +146,18 @@
                         }
                         //预约失败
                         else{
-                            //已有预约
-                            if(reserveResult.msg == "该时间段您已有预约！"){
+                            //该时间段您已有预约！
+                            if(reserveResult.msg.match("已有预约")){
                                 //切换下一个时间段
                                 timeIndex++;
                             }
-                            //被占用
-                            else if(reserveResult.msg == "该时段已经被占用！"){
+                            //该时间段已被占用！
+                            else if(reserveResult.msg.match("占用")){
                                 //换座位
                                 seatIndex++;
                             }
-                            //预约失败
-                            else if(reserveResult.msg == "预约失败，请退出后重试！"){
+                            //预约失败，请退出后重试！
+                            else if(reserveResult.msg.match("失败")){
                                 //允许的范围内,原座位,原时间,重新预约
                                 if(failNum < maxFailNum){
                                     //记录失败次数
@@ -169,7 +166,12 @@
                                 }
                             }
                             //非法预约
-                            else if(reserveResult.msg == "非法预约"){
+                            else if(reserveResult.msg.match("非法")){
+                                //直接停止
+                                timeIndex = timeList.length;
+                            }
+                            //未知情况
+                            else{
                                 //直接停止
                                 timeIndex = timeList.length;
                             }
@@ -212,7 +214,3 @@
     }, 1000*60*60);
 
 })();
-
-
-
-
