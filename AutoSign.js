@@ -6,7 +6,7 @@
 // @grant       GM_notification
 // @connect     office.chaoxing.com
 // @connect     www.pushplus.plus
-// @version     1.3
+// @version     1.4
 // @author      Richard
 // @description 每2分钟检查签到, 并设置定时器, 到点自动签到/签退
 // @icon        https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/calendar-check.svg
@@ -33,6 +33,8 @@
 
     //本地+推送 通知服务
     function information(seatNum, type, result, msg){
+        //浏览器通知
+        console.log("座位 "+seatNum+" "+type+result);
         //弹出通知
         GM_notification({
             image: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/circle-check.svg",
