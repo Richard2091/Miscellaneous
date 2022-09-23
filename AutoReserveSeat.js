@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     2.1
+// @version     2.2
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -18,7 +18,7 @@
 	//自习室(电子借阅室905,自习一室906,自习四室907)
 	var roomId = '905';
 	//座位号(输入完整编号,前面如果有0就要带0)
-	var seatList = ["001", "050", "099", "188"];
+	var seatList = ["001", "050", "099", "165"];
 	//预约时间(每行代表一次预约,一行内前者表示开始时间,后者表示结束时间)
 	var timeList = [["18:00", "22:00"], ["14:00", "18:00"], ["12:30", "14:00"], ["08:30", "12:30"]];
 	//开始运行时间(默认21:30:00:000 注意前面不要带0, 如01, 直接写1即可)
@@ -71,7 +71,7 @@
 
 	//到点自动预约
 	function waitReserve() {
-		setTimeout(() = >{
+		setTimeout(() => {
 			//明天的日期
 			let tomorrow = dayjs().add(1, 'day').format("YYYY-MM-DD");
 			//选用的座位
@@ -196,14 +196,15 @@
 		isWaiting = true;
 		//输出提示信息
 		console.log("现在时间是 " + dayjs().format("YYYY/MM/DD HH:mm:ss"));
-		console.log("将在 " + reserveTime.format("MM/DD HH:mm:ss:SSS") + " 发起预约") console.log("座位候选列表: " + seatList);
+		console.log("将在 " + reserveTime.format("MM/DD HH:mm:ss:SSS") + " 发起预约");
+        	console.log("座位候选列表: " + seatList);
 	}
 
 	//初始化
 	startWait();
 
 	//每隔一小时检查等待函数是否运行
-	setInterval(() = >{
+	setInterval(() =>{
 		//没有运行等待预约函数(一般是刚预约完)
 		if (!isWaiting) {
 			startWait();
