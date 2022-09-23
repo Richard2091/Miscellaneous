@@ -6,9 +6,9 @@
 // @grant       GM_notification
 // @connect     office.chaoxing.com
 // @connect     www.pushplus.plus
-// @version     1.2
+// @version     1.3
 // @author      Richard
-// @description 每10分钟检查签到, 并设置定时器, 到点自动签到/签退
+// @description 每2分钟检查签到, 并设置定时器, 到点自动签到/签退
 // @icon        https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/calendar-check.svg
 // @require     https://cdn.jsdelivr.net/npm/dayjs@1.11.5/dayjs.min.js
 // ==/UserScript==
@@ -106,22 +106,53 @@
                         waitSign = false;
                         waitSignback = false;
                     }
-                    //还未签到
-                    if(startTime > nowTime && !waitSign){
-                        console.log("当前预约:"+seatNum+" 已获取签到时间, 等待中");
+
+                    //还未过签到时间
+                    if(startTime+20*60000 > nowTime && !waitSign){
                         //等待签到
                         waitSign = true;
-                        //开启签到定时器
-                        sign(seatNum, URL+"sign"+parameter, "签到", startTime-nowTime-(advanceTime*60000));
+                        //等待时间
+                        let waitTime;
+
+                        //是否已在签到时间
+                        if(nowTime>=startTime-20*60000){
+                            console.log("当前预约:"+seatNum+" 已获取签到时间, 立即签到");
+                            //设置立即签到
+                            waitTime = 0;
+                        }
+                        //还没到签到时间段
+                        else{
+                            console.log("当前预约:"+seatNum+" 已获取签到时间, 等待中");
+                            //设置提前签到
+                            waitTime = startTime-nowTime-(advanceTime*60000);
+                        }
+
+                        //调用签到
+                        sign(seatNum, URL+"sign"+parameter, "签到", waitTime);
                     }
 
-                    //还未签退
-                    if(endTime > nowTime && !waitSignback){
-                        console.log("当前预约:"+seatNum+" 已获取签退时间, 等待中");
+                    //还未过签退时间
+                    if(endTime+20*60000 > nowTime && !waitSignback){
                         //等待签退
                         waitSignback = true;
-                        //开启签退定时器
-                        sign(seatNum, URL+"signback"+parameter, "签退", endTime-nowTime);
+                        //等待时间
+                        let waitTime;
+
+                        //已经到了后半段
+                        if(nowTime > endTime){
+                            console.log("当前预约:"+seatNum+" 已获取签退时间, 立即签退");
+                            //立即签退
+                            waitTime = 0;
+                        }
+                        //还没到签到正点
+                        else{
+                            console.log("当前预约:"+seatNum+" 已获取签退时间, 等待中");
+                            //开启签退定时器
+                            waitTime = endTime-nowTime;
+                        }
+
+                        //调用签退
+                        sign(seatNum, URL+"signback"+parameter, "签退", waitTime);
                     }
                 }
             }
@@ -134,6 +165,6 @@
     //定时检查
     let timetest = setInterval(()=>{
         checkReserve();
-    }, 1000*60*10); //每隔10分钟检查
+    }, 1000*60*2); //每隔2分钟检查
 
 })()
