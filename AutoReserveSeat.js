@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     2.2
+// @version     2.3
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -122,13 +122,14 @@
 						let title = seatList[seatIndex] + " " + timeList[timeIndex][0] + "-" + timeList[timeIndex][1];
 						//信息内容
 						let content = "页面请求时间 " + requestHtmlTime + "<br>" + "发起预约时间 " + requestReserveTime + "<br>" + "收到结果时间 " + receiveResultTime;
-						//控制台输出结果
+						//控制台输出提示
 						console.log(receiveResultTime + " 预约结果:");
-						console.log(title + " " + reserveResult.msg);
 
 						//预约成功
 						if (reserveResult.success) {
 							reserveResult.msg = "预约成功";
+							//输出结果
+							console.log(title + " " + reserveResult.msg);
 							//预约下一个时间段
 							timeIndex++;
 							//判断是否推送
@@ -143,6 +144,8 @@
 						}
 						//预约失败
 						else {
+							//输出结果
+							console.log(title + " " + reserveResult.msg);
 							//该时间段您已有预约！
 							if (reserveResult.msg.match("已有预约")) {
 								//切换下一个时间段
