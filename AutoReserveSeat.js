@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     2.3
+// @version     2.3.1
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -89,7 +89,7 @@
 				let htmlURL = "http://office.chaoxing.com/front/third/apps/seatengine/select?";
 				let htmlParameter = "id=" + roomId + "&day=" + tomorrow + "&backLevel=2&seatId=661&fidEnc=e8d15c598859417b"
 				//发起页面请求的时间
-				let requestHtmlTime = dayjs().format("HH:MM:ss:SSS");
+				let requestHtmlTime = dayjs().format("HH:mm:ss:SSS");
 				console.log(requestHtmlTime + " 发起预约");
 				//页面请求
 				$.ajax({
