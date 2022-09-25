@@ -6,9 +6,9 @@
 // @grant       GM_notification
 // @connect     office.chaoxing.com
 // @connect     www.pushplus.plus
-// @version     1.7
+// @version     1.7.1
 // @author      Richard
-// @description 每分钟检查签到, 并设置定时器, 到点自动签到/签退，被监督自动落座
+// @description 每10分钟检查签到, 并设置定时器, 到点自动签到/签退，被监督自动落座
 // @icon        https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/calendar-check.svg
 // @require     https://cdn.jsdelivr.net/npm/dayjs@1.11.5/dayjs.min.js
 // ==/UserScript==
@@ -174,6 +174,6 @@
     //定时检查
     let timetest = setInterval(()=>{
         checkReserve();
-    }, 1000*60); //每分钟检查
+    }, 1000*60*10); //每分钟检查
 
 })()
