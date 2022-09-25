@@ -6,9 +6,9 @@
 // @grant       GM_notification
 // @connect     office.chaoxing.com
 // @connect     www.pushplus.plus
-// @version     1.6
+// @version     1.7
 // @author      Richard
-// @description 每2分钟检查签到, 并设置定时器, 到点自动签到/签退
+// @description 每分钟检查签到, 并设置定时器, 到点自动签到/签退，被监督自动落座
 // @icon        https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/calendar-check.svg
 // @require     https://cdn.jsdelivr.net/npm/dayjs@1.11.5/dayjs.min.js
 // ==/UserScript==
@@ -96,6 +96,7 @@
                     let roomId = result.data.curReserves[0].roomId;
                     let seatId = result.data.curReserves[0].seatId;
                     let seatNum = result.data.curReserves[0].seatNum;
+                    let status = result.data.curReserves[0].status;
                     let URL = "https://office.chaoxing.com/data/apps/seatengine/"
                     let parameter = "?id="+reserveId+"&roomId="+roomId+"&seatId="+seatId+"&seatNum="+seatNum;
                     //console.log(URL+"sign"+parameter);
@@ -156,6 +157,12 @@
                         //调用签退
                         sign(seatNum, URL+"signback"+parameter, "签退", waitTime);
                     }
+
+                    //是否被监督
+                    if(status == 5){
+                        //立即签到
+                        sign(seatNum, URL+"sign"+parameter, "落座", 0);
+                    }
                 }
             }
         });
@@ -167,6 +174,6 @@
     //定时检查
     let timetest = setInterval(()=>{
         checkReserve();
-    }, 1000*60*2); //每隔2分钟检查
+    }, 1000*60); //每分钟检查
 
 })()
