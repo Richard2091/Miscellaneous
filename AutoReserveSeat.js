@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     2.3.2
+// @version     2.3.3
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       none
@@ -90,7 +90,7 @@
 				let htmlParameter = "id=" + roomId + "&day=" + tomorrow + "&backLevel=2&seatId=661&fidEnc=e8d15c598859417b"
 				//发起页面请求的时间
 				let requestHtmlTime = dayjs().format("HH:mm:ss:SSS");
-				console.log(requestHtmlTime + " 发起预约");
+				console.log(requestHtmlTime + " 进入预约");
 				//页面请求
 				$.ajax({
 					type: "GET",
@@ -109,6 +109,7 @@
 				var reserveParameter = "roomId=" + roomId + "&startTime=" + timeList[timeIndex][0] + "&endTime=" + timeList[timeIndex][1] + "&day=" + tomorrow + "&seatNum=" + (seatList[seatIndex]) + "&token=" + token;
 				//发起预约请求的时间
 				let requestReserveTime = dayjs().format("HH:mm:ss:SSS");
+				console.log(requestReserveTime + " 发起预约");
 				//发起预约
 				$.ajax({
 					type: "GET",
