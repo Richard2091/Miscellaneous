@@ -6,7 +6,7 @@
 // @grant       GM_notification
 // @connect     office.chaoxing.com
 // @connect     www.pushplus.plus
-// @version     1.7.2
+// @version     1.8
 // @author      Richard
 // @description 每10分钟检查签到, 并设置定时器, 到点自动签到/签退，被监督自动落座
 // @icon        https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/calendar-check.svg
@@ -18,8 +18,6 @@
 
     ////////////  用户配置  ////////////
 
-    //签到提前时间 (例如预约的8:30, 此处填18, 将会在8:12签到)
-    let advanceTime = 18;
     //推送服务 (访问此页面获取 https://www.pushplus.plus/push1.html 留空则不推送)
     let token = "";
 
@@ -127,7 +125,7 @@
                         else{
                             console.log("当前预约:"+seatNum+" 已获取签到时间, 等待中");
                             //设置提前签到
-                            waitTime = startTime-nowTime-(advanceTime*60000);
+                            waitTime = startTime-nowTime;
                         }
 
                         //调用签到
