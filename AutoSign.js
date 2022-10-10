@@ -4,6 +4,7 @@
 // @match       *://office.chaoxing.com/*
 // @grant       GM_xmlhttpRequest
 // @grant       GM_notification
+// @grant       GM_log
 // @connect     office.chaoxing.com
 // @connect     www.pushplus.plus
 // @version     1.9
@@ -33,12 +34,6 @@
     function information(seatNum, type, result, msg){
         //浏览器通知
         console.log("座位 "+seatNum+" "+type+result);
-        //弹出通知
-        GM_notification({
-            image: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/circle-check.svg",
-            title: "座位 "+seatNum+" "+type+result,
-            text: dayjs().format("MM/DD HH:mm:ss")
-        });
         //如果填了token则推送
         if(token != ""){
             let title = "座位 "+seatNum+" "+type+result;
@@ -70,7 +65,8 @@
                     }
                     //操作失败
                     else{
-                        information(seatNum, type, "失败", result.msg+"<br>"+`<button onclick="window.open('${URL}')">点击手动签到</button>`);
+                        information(seatNum, type, "失败", result.msg+"<br>"+URL+"<br>打开链接手动"+type);
+                        GM_log("打开链接手动"+type+": "+URL);
                     }
                 }
             });
