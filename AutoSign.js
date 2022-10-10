@@ -6,7 +6,7 @@
 // @grant       GM_notification
 // @connect     office.chaoxing.com
 // @connect     www.pushplus.plus
-// @version     1.8
+// @version     1.9
 // @author      Richard
 // @description 每10分钟检查签到, 并设置定时器, 到点自动签到/签退，被监督自动落座
 // @icon        https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/calendar-check.svg
@@ -96,7 +96,7 @@
                     let seatNum = result.data.curReserves[0].seatNum;
                     let status = result.data.curReserves[0].status;
                     let URL = "https://office.chaoxing.com/data/apps/seatengine/"
-                    let parameter = "?id="+reserveId+"&roomId="+roomId+"&seatId="+seatId+"&seatNum="+seatNum;
+                    let parameter = "?id="+curReserveId+"&roomId="+roomId+"&seatId="+seatId+"&seatNum="+seatNum;
                     //console.log(URL+"sign"+parameter);
 
                     //新的预约
