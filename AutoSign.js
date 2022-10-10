@@ -4,10 +4,10 @@
 // @match       *://office.chaoxing.com/*
 // @grant       GM_xmlhttpRequest
 // @grant       GM_notification
-// @grant       console.log
+// @grant       GM_log
 // @connect     office.chaoxing.com
 // @connect     www.pushplus.plus
-// @version     1.9.2
+// @version     1.9.3
 // @author      Richard
 // @description 每10分钟检查签到, 并设置定时器, 到点自动签到/签退，被监督自动落座
 // @icon        https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/regular/calendar-check.svg
@@ -44,7 +44,7 @@
                 url: "http://www.pushplus.plus/send?token="+token+"&title="+title+"&content="+content+"&template=html",
                 async: true,
                 success: function(data) {
-                    // console.log(data);
+                
                 }
             });
         }
@@ -93,8 +93,7 @@
                     let status = result.data.curReserves[0].status;
                     let URL = "https://office.chaoxing.com/data/apps/seatengine/"
                     let parameter = "?id="+curReserveId+"&roomId="+roomId+"&seatId="+seatId+"&seatNum="+seatNum;
-                    //console.log(URL+"sign"+parameter);
-
+                    
                     //新的预约
                     if(curReserveId != reserveId){
                         //转移到新预约
