@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     2.3.3
+// @version     2.4.0
 // @author      Richard
 // @description 定时自动模拟请求预约座位
-// @grant       none
+// @grant       GM_log
 // @icon        https://raw.githubusercontent.com/Richard2091/Miscellaneous/main/Rick.jpg
 // @namespace   hnit_chaoxing_library_seatSystem
 // @match       *://office.chaoxing.com/*
@@ -52,7 +52,7 @@
 			url: "https://sctapi.ftqq.com/" + sendKey + ".send?title=" + title,
 			async: true,
 			success: function(data) {
-				// console.log(data);
+				// GM_log(data);
 			}
 		});
 	}
@@ -64,7 +64,7 @@
 			url: "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + content + "&template=html",
 			async: true,
 			success: function(data) {
-				// console.log(data);
+				// GM_log(data);
 			}
 		});
 	}
@@ -90,7 +90,7 @@
 				let htmlParameter = "id=" + roomId + "&day=" + tomorrow + "&backLevel=2&seatId=661&fidEnc=e8d15c598859417b"
 				//发起页面请求的时间
 				let requestHtmlTime = dayjs().format("HH:mm:ss:SSS");
-				console.log(requestHtmlTime + " 进入预约");
+				GM_log(requestHtmlTime + " 进入预约");
 				//页面请求
 				$.ajax({
 					type: "GET",
@@ -103,13 +103,13 @@
 
 				//提取token
 				var token = htmlData.split("token: '")[1].split("'")[0];
-				// console.log(token)
+				// GM_log(token)
 				//定义链接
 				var reserveURL = "http://office.chaoxing.com/data/apps/seatengine/submit?";
 				var reserveParameter = "roomId=" + roomId + "&startTime=" + timeList[timeIndex][0] + "&endTime=" + timeList[timeIndex][1] + "&day=" + tomorrow + "&seatNum=" + (seatList[seatIndex]) + "&token=" + token;
 				//发起预约请求的时间
 				let requestReserveTime = dayjs().format("HH:mm:ss:SSS");
-				console.log(requestReserveTime + " 发起预约");
+				GM_log(requestReserveTime + " 发起预约");
 				//发起预约
 				$.ajax({
 					type: "GET",
@@ -124,13 +124,13 @@
 						//信息内容
 						let content = "页面请求时间 " + requestHtmlTime + "<br>" + "发起预约时间 " + requestReserveTime + "<br>" + "收到结果时间 " + receiveResultTime;
 						//控制台输出提示
-						console.log(receiveResultTime + " 预约结果:");
+						GM_log(receiveResultTime + " 预约结果:");
 
 						//预约成功
 						if (reserveResult.success) {
 							reserveResult.msg = "预约成功";
 							//输出结果
-							console.log(title + " " + reserveResult.msg);
+							GM_log(title + " " + reserveResult.msg);
 							//预约下一个时间段
 							timeIndex++;
 							//判断是否推送
@@ -146,7 +146,7 @@
 						//预约失败
 						else {
 							//输出结果
-							console.log(title + " " + reserveResult.msg);
+							GM_log(title + " " + reserveResult.msg);
 							//该时间段您已有预约！
 							if (reserveResult.msg.match("已有预约")) {
 								//切换下一个时间段
@@ -199,9 +199,9 @@
 		waitReserve();
 		isWaiting = true;
 		//输出提示信息
-		console.log("现在时间是 " + dayjs().format("YYYY/MM/DD HH:mm:ss"));
-		console.log("将在 " + reserveTime.format("MM/DD HH:mm:ss:SSS") + " 发起预约");
-        	console.log("座位候选列表: " + seatList);
+		GM_log("现在时间是 " + dayjs().format("YYYY/MM/DD HH:mm:ss"));
+		GM_log("将在 " + reserveTime.format("MM/DD HH:mm:ss:SSS") + " 发起预约");
+        	GM_log("座位候选列表: " + seatList);
 	}
 
 	//初始化
