@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        自动预约座位
-// @version     2.4.1
+// @version     2.4.2
 // @author      Richard
 // @description 定时自动模拟请求预约座位
 // @grant       GM_log
@@ -102,7 +102,7 @@
 				});
 
 				//提取token
-				var token = htmlData.split("token: '")[1].split("'")[0];
+				var token = htmlData.split("token = '")[1].split("'")[0];
 				// GM_log(token)
 				//定义链接
 				var reserveURL = "http://office.chaoxing.com/data/apps/seatengine/submit?";
