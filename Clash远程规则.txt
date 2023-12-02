@@ -1,21 +1,21 @@
 ;设置规则标志位
 surge_ruleset=广告拦截,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list
 surge_ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list
+surge_ruleset=GPT自动,https://raw.githubusercontent.com/G4free/clash-ruleset/main/ruleset/ChatGPT.yaml
 surge_ruleset=国内流量,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list
 surge_ruleset=国内流量,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaIp.list
 surge_ruleset=国内流量,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list
 surge_ruleset=国外流量,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyGFWlist.list
-surge_ruleset=GPT自动,https://raw.githubusercontent.com/G4free/clash-ruleset/main/ruleset/ChatGPT.yaml
 surge_ruleset=漏网之鱼,[]MATCH
 ;设置规则标志位
 
 ;设置分组标志位
+custom_proxy_group=国外流量`select`[]香港自动`[]新加坡自动`[]日本自动`[]手动选择
 custom_proxy_group=国内流量`select`[]DIRECT`[]国外流量
-custom_proxy_group=国外流量`select`[]香港自动`[]日本自动`[]新加坡自动`[]手动选择
 custom_proxy_group=手动选择`select`.*
 custom_proxy_group=香港自动`url-test`香港|HK|🇭🇰`http://www.gstatic.com/generate_204`300
-custom_proxy_group=日本自动`url-test`日本|东京|JP|🇯🇵`http://www.gstatic.com/generate_204`300
 custom_proxy_group=新加坡自动`url-test`新加坡|狮城|SG|🇸🇬`http://www.gstatic.com/generate_204`300
+custom_proxy_group=日本自动`url-test`日本|东京|JP|🇯🇵`http://www.gstatic.com/generate_204`300
 custom_proxy_group=GPT自动`url-test`GPT|gpt`http://www.gstatic.com/generate_204`300
 custom_proxy_group=漏网之鱼`select`[]DIRECT`[]国外流量
 custom_proxy_group=广告拦截`select`[]DIRECT`[]REJECT
